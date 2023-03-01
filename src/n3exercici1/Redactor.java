@@ -1,10 +1,7 @@
 /*** S1.1 Nivell 3 exercici 1 ***/
 package n3exercici1;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 public class Redactor {
     private String nom;
@@ -62,7 +59,19 @@ public class Redactor {
         return this.getNom().equals(redactor.getNom()) && this.getDNI().equals(redactor.getDNI());
     }
 
-    /* Declaring static methods */
+    public static Redactor obtenirRedactor(Set<Redactor> redactors, Redactor redactor) {
+        boolean notTrobat=true;
+        Iterator<Redactor> it=redactors.iterator();
+        Redactor redactor_aux=null;
+        while(notTrobat&&it.hasNext()) {
+            redactor_aux=it.next();
+            if(redactor_aux.equals(redactor)) {
+                notTrobat=false;
+            }
+        }
+        return redactor_aux;
+    }
+
     public static void afegirRedactor(Set<Redactor> redactors, Scanner sc) {  //Adding redactor
         System.out.println("Introdueix el nom del redactor");
         var nom = sc.nextLine();
@@ -77,7 +86,12 @@ public class Redactor {
         System.out.println("Introdueix el DNI del redactor");
         var DNI = sc.nextLine();
         var redactor = new Redactor(nom, DNI);
-        redactors.remove(redactor);
+        if(redactors.contains(redactor)) {
+            redactors.remove(redactor);
+        }
+        else {
+            System.out.println("Aquest redactor no existeix");
+        }
     }
     public static void mostrarNoticies(Set<Redactor> redactors, Scanner sc) {  //Showing news by redactor
         System.out.println("Introdueix el nom redactor");
@@ -85,12 +99,14 @@ public class Redactor {
         System.out.println("Introdueix el DNI redactor");
         var DNI = sc.nextLine();
         var redactor = new Redactor(nom, DNI);
-        for (Redactor redactor_aux : redactors) {
-            if (redactor_aux.equals(redactor)) {
-                for (Noticia noticia : redactor_aux.getNoticies()) {
-                    System.out.println(noticia.getTitol());
-                }
+        Redactor redactor_aux;
+        if((redactor_aux=obtenirRedactor(redactors,redactor))!=null) {
+            for(Noticia noticia:redactor_aux.getNoticies()) {
+                System.out.println(noticia.getTitol());
             }
+        }
+        else {
+            System.out.println("Aquest redactor no existeix");
         }
     }
 }

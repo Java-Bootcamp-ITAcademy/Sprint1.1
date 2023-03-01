@@ -3,7 +3,7 @@
 package n1exercici2;
 
 public class Cotxe {
-    private static final String MARCA;   //Must be initialized since it's a final variable. We'll do in static block.
+    public static final String MARCA;   //Must be initialized since it's a final variable. We'll do in static block.
     private static String model;    //CAN be initialized in a static block initializer.
     private final double potencia;    //Must be initialized since it's a final attribute. We'll do it in the constructor
 

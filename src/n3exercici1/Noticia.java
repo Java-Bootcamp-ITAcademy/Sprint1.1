@@ -2,6 +2,7 @@
 package n3exercici1;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -106,6 +107,19 @@ public abstract class Noticia {
         }
     }
 
+    public static Noticia obtenirNoticia(Redactor redactor, String titular) {
+        Noticia noticia=null;
+        boolean noTrobat=true;
+        Iterator<Noticia> i=redactor.getNoticies().iterator();
+        while(noTrobat&&i.hasNext()) {
+             noticia=i.next();
+             if(noticia.getTitol().equals(titular)) {
+                 noTrobat=false;
+             }
+        }
+        return noticia;
+    }
+
     public static void eliminarNoticia(Set<Redactor> redactors, Scanner sc) {
         System.out.println("Introdueix el nom redactor");
         var nom = sc.nextLine();
@@ -114,19 +128,20 @@ public abstract class Noticia {
         var redactor = new Redactor(nom, DNI);
         System.out.println("Introdueix titular");
         var titular = sc.nextLine();
-        var notFound=true;
-        for (Redactor redactor_aux : redactors) {
-            if (redactor.equals(redactor_aux)) {
-                Iterator<Noticia> it=redactor_aux.getNoticies().iterator();
-                while(it.hasNext()&&notFound) {
-                    Noticia noticia=it.next();
-                    String titol=noticia.getTitol();
-                    if(titol.equals(titular)) {
-                        it.remove();
-                        notFound=false;
-                    }
-                }
-            }
+
+        Noticia noticia;
+        if(redactors.contains(redactor)) {
+           Redactor redactor_aux=Redactor.obtenirRedactor(redactors,redactor);
+           if((noticia=obtenirNoticia(redactor_aux,titular))!=null) {
+               System.out.println(noticia.getTitol());
+               redactor_aux.getNoticies().remove(noticia);
+           }
+           else {
+               System.out.println("Notícia no esxistent!");
+           }
+        }
+        else {
+            System.out.println("Redactor no esxistent!");
         }
     }
     public static void calcularPreuTotal(Set<Redactor> redactors,Scanner sc) {
